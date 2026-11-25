@@ -2,13 +2,12 @@
     analysis to be executed over the Flask channel and deployed on
     localhost:5000.
 '''
-# Import Flask, render_template, request from the flask framework package 
+#Import Flask, render_template, request from the flask framework package
 from flask import Flask, render_template, request
-# Import the sentiment_analyzer function from the package created
+#Import the sentiment_analyzer function from the package created
 from EmotionDetection.emotion_detection import emotion_detector
-import json
 
-#Initiate the flask app 
+#Initiate the flask app
 app = Flask("Emotion Detector")
 @app.route("/emotionDetector")
 def sent_analyzer():
@@ -19,19 +18,17 @@ def sent_analyzer():
     '''
     text_to_analyze = request.args.get('textToAnalyze')
     result = emotion_detector(text_to_analyze)
-    
     #check result is valid
-    if result['dominant_emotion'] == None:
-        return("Invalid text! Please try again!")
-    else:
-        response = (f"For the given statement, the system response is "
-        f"'anger': {result['anger']}, "
-        f"'disgust': {result['disgust']}, "
-        f"'fear': {result['fear']}, "
-        f"'joy': {result['joy']} and "
-        f"'sadness': {result['sadness']}. "
-        f"The dominant emotion is {result['dominant_emotion']}.")
-        return(response)
+    if result['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+    response = (f"For the given statement, the system response is "
+    f"'anger': {result['anger']}, "
+    f"'disgust': {result['disgust']}, "
+    f"'fear': {result['fear']}, "
+    f"'joy': {result['joy']} and "
+    f"'sadness': {result['sadness']}. "
+    f"The dominant emotion is {result['dominant_emotion']}.")
+    return response
 
 @app.route("/")
 def render_index_page():
@@ -41,5 +38,4 @@ def render_index_page():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    ''' This functions executes the flask app and deploys it on localhost:5000'''
     app.run(host="0.0.0.0", port=5000)
